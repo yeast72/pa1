@@ -1,6 +1,13 @@
 package converter;
 
 public class UnitConverter {
+	/**
+	 * 
+	 * @param amount
+	 * @param fromUnit
+	 * @param toUnit
+	 * @return c
+	 */
 	public double convert(double amount,Length fromUnit, Length toUnit){
 		return (amount * fromUnit.getValue()) / toUnit.getValue();
 	}

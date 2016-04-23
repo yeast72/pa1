@@ -39,7 +39,9 @@ public class ConverterUI extends JFrame {
 
 		initComponents();
 	}
-
+	/**
+	 * initialize components in the window
+	 */
 	private void initComponents() {
 		JPanel contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -65,7 +67,7 @@ public class ConverterUI extends JFrame {
 		RightTextField.setEditable(false);
 
 		RightComboBox = new JComboBox(Length.values());
-		RightComboBox.addActionListener(new ConvertButtonListener());
+		
 		contentPane.add(RightComboBox);
 
 		convertButton = new JButton("Convert!");
@@ -91,6 +93,12 @@ public class ConverterUI extends JFrame {
 		this.add(contentPaneSount, BorderLayout.SOUTH);
 		this.pack();
 	}
+	/**
+	 * LeftRightRadioButtionListener is an ActionListener that performs an action when the button is pressed.
+	 * It set left field text to input text field and set right text field to result text field,
+	 * set another radio button is not selected.
+	 * 
+	 */
 	class LeftRightRadioButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
 			LeftTextField.setEditable(true);
@@ -100,7 +108,12 @@ public class ConverterUI extends JFrame {
 		}
 		
 	}
-	
+	/**
+	 * RightLeftRadionButtonListener is an ActionListener that performs an action when the button is pressed.
+	 * It set right field text to input text field and set left field text to result text field,
+	 * set another radio button is not selected.
+	 *
+	 */
 	class RightLeftRadioButtonListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			LeftTextField.setEditable(false);
@@ -110,6 +123,11 @@ public class ConverterUI extends JFrame {
 		}
 		
 	}
+	/**
+	 * CleatButtonListener is an ActionListener that performs an action when the button is pressed.
+	 * It is an inner class so it can access private attributes of ConverterUI.
+	 * It set text field to empty
+	 */
 	class ClearButtonListener implements ActionListener {
 
 		@Override
@@ -118,9 +136,14 @@ public class ConverterUI extends JFrame {
 			LeftTextField.setText("");
 		}	
 	}
-
+	/**
+	 * ConvertButtonListener is an ActionListener that performs an action when the button is pressed.
+	 * It is an inner class so it can access private attributes of ConverterUI.
+	 * It reads the text from JTextField, convert the value to a number, unitconverter to convert,
+	 * and write result in other text field.
+	 */
 	class ConvertButtonListener implements ActionListener, KeyListener {
-
+		/** The action to perform action when the "convert" button is pressed */
 		public void actionPerformed(ActionEvent evt) {
 			String s = "";
 			if(LeftTextField.isEditable())
@@ -138,7 +161,7 @@ public class ConverterUI extends JFrame {
 					LeftTextField.setText(String.valueOf(String.format("%.6f", (unitconverter.convert(value, unit2, unit1)))));
 			}
 		}
-
+		/** The action to perform action when press Enter */
 		public void keyPressed(KeyEvent e) {
 			String s = "";
 			if(LeftTextField.isEditable())
