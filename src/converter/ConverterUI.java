@@ -26,16 +26,17 @@ import javax.swing.border.EmptyBorder;
 
 /**
  * GUI of unit converter
+ * 
  * @author Wisarut Boonnumma
  *
  */
-public class ConverterUI extends JFrame implements Runnable{
+public class ConverterUI extends JFrame implements Runnable {
 
 	private JButton convertButton;
 	private UnitConverter unitconverter;
 	private JMenuBar menuBar;
 	private JMenu menu;
-	private JMenuItem itemLength, itemWeight, itemVolume, itemArea, itemExit;
+	private JMenuItem itemExit;
 	private JTextField leftTextField;
 	private JTextField rightTextField;
 	private JComboBox<Unit> leftComboBox;
@@ -66,7 +67,6 @@ public class ConverterUI extends JFrame implements Runnable{
 		leftTextField.addActionListener(new convertButtonListenerLeftToRight());
 
 		leftComboBox = new JComboBox<Unit>(unitconverter.getUnits(utype));
-		leftComboBox.addActionListener(new convertButtonListenerLeftToRight());
 		contentPane.add(leftComboBox);
 
 		JLabel label = new JLabel("=");
@@ -79,7 +79,6 @@ public class ConverterUI extends JFrame implements Runnable{
 		rightTextField.setColumns(10);
 
 		rightComboBox = new JComboBox<Unit>(unitconverter.getUnits(utype));
-		rightComboBox.addActionListener(new convertButtonListenerLeftToRight());
 		contentPane.add(rightComboBox);
 
 		convertButton = new JButton("Convert!");
@@ -92,48 +91,8 @@ public class ConverterUI extends JFrame implements Runnable{
 
 		menuBar = new JMenuBar();
 
-		menu = new JMenu("Unit Type");
+		menu = makeMenu();
 		menuBar.add(menu);
-
-		itemLength = new JMenuItem("Length");
-		itemLength.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				utype = UnitType.LENGTH;
-				updateComboBox(utype);
-			}
-
-		});
-		menu.add(itemLength);
-
-		itemArea = new JMenuItem("Area");
-		itemArea.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				utype = UnitType.AREA;
-				updateComboBox(utype);
-			}
-
-		});
-		menu.add(itemArea);
-
-		itemVolume = new JMenuItem("Volume");
-		itemVolume.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				utype = UnitType.VOLUME;
-				updateComboBox(utype);
-			}
-
-		});
-		menu.add(itemVolume);
-
-		itemWeight = new JMenuItem("Weight");
-		itemWeight.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				utype = UnitType.WEIGHT;
-				updateComboBox(utype);
-			}
-
-		});
-		menu.add(itemWeight);
 
 		menu.addSeparator();
 		itemExit = new JMenuItem("Exit");
@@ -152,22 +111,50 @@ public class ConverterUI extends JFrame implements Runnable{
 	}
 
 	/**
-	 * updateComboBox is update type of unit when change type
-	 * 
-	 * @param utype
-	 *            unit type
+	 * UnitAction is an ActionListener that perform when the menu is pressed It
+	 * is an inner class so it can access private attributes of ConverterUI. It
+	 * change ComboBox to unit that selected.
 	 */
-	private void updateComboBox(UnitType utype) {
-		leftComboBox.removeAllItems();
-		rightComboBox.removeAllItems();
-		Unit[] units = unitconverter.getUnits(utype);
-		for (Unit u : units) {
-			leftComboBox.addItem(u);
-			rightComboBox.addItem(u);
-		}
-		rightTextField.setText("");
-		leftTextField.setText("");
+	class UnitAction implements ActionListener {
+		private UnitType utype;
 
+		/**
+		 * Constructor of this class
+		 * 
+		 * @param utype
+		 */
+		UnitAction(UnitType utype) {
+			this.utype = utype;
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			leftComboBox.removeAllItems();
+			rightComboBox.removeAllItems();
+			Unit[] units = unitconverter.getUnits(utype);
+			for (Unit u : units) {
+				leftComboBox.addItem(u);
+				rightComboBox.addItem(u);
+			}
+			rightTextField.setText("");
+			leftTextField.setText("");
+		}
+
+	}
+
+	/**
+	 * create menu from type of unit
+	 * 
+	 * @return menu
+	 */
+	private JMenu makeMenu() {
+		JMenu menu = new JMenu("Unit Type");
+		UnitType[] unitTypes = UnitFactory.getInstance().getUnitTypes();
+		for (UnitType utype : unitTypes) {
+			JMenuItem menuItem = new JMenuItem(utype.toString());
+			menuItem.addActionListener(new UnitAction(utype));
+			menu.add(menuItem);
+		}
+		return menu;
 	}
 
 	/**
@@ -183,11 +170,11 @@ public class ConverterUI extends JFrame implements Runnable{
 	}
 
 	/**
-	 * ConvertButtonListenerLeftToRight is an ActionListener that performs an action when
-	 * the button or text field is pressed. It is an inner class so it can access private
-	 * attributes of ConverterUI. It reads the text from JTextField, convert the
-	 * value to a number, unitconverter to convert, and write result in other
-	 * text field.
+	 * ConvertButtonListenerLeftToRight is an ActionListener that performs an
+	 * action when the button or text field is pressed. It is an inner class so
+	 * it can access private attributes of ConverterUI. It reads the text from
+	 * JTextField, convert the value to a number, unitconverter to convert, and
+	 * write result in other text field.
 	 */
 	class convertButtonListenerLeftToRight implements ActionListener {
 		/** The action to perform action when the "convert" button is pressed */
@@ -212,13 +199,13 @@ public class ConverterUI extends JFrame implements Runnable{
 			}
 		}
 	}
-	
+
 	/**
-	 * ConvertButtonListenerRightToLeft is an ActionListener that performs an action when
-	 * the button or text field is pressed. It is an inner class so it can access private
-	 * attributes of ConverterUI. It reads the text from JTextField, convert the
-	 * value to a number, unitconverter to convert, and write result in other
-	 * text field.
+	 * ConvertButtonListenerRightToLeft is an ActionListener that performs an
+	 * action when the button or text field is pressed. It is an inner class so
+	 * it can access private attributes of ConverterUI. It reads the text from
+	 * JTextField, convert the value to a number, unitconverter to convert, and
+	 * write result in other text field.
 	 */
 	class convertButtonListenerRighttoLeft implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
@@ -244,12 +231,13 @@ public class ConverterUI extends JFrame implements Runnable{
 		}
 
 	}
+
 	/**
 	 * run this user interface
 	 */
 	public void run() {
 		this.setVisible(true);
-		
+
 	}
 
 }

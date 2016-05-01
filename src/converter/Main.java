@@ -1,6 +1,6 @@
 package converter;
 /**
- * run ConverterUI
+ * Application unit converter class
  * @author Wisarut Boonnumma
  *
  */

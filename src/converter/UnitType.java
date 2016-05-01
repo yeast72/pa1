@@ -37,9 +37,9 @@ public enum UnitType {
 
 	/**
 	 * 
-	 * @return name of unit
+	 * @return
 	 */
-	public String getName() {
+	public String toString() {
 		return name;
 	}
 
